@@ -8,3 +8,6 @@ dist/
 build/
 .DS_Store
 CLAUDE.md
+OPERATOR-HANDOFF.md
+AGENTS.md
+.claude/logs/
