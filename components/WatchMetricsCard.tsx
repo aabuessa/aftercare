@@ -4,7 +4,7 @@ import { Trend, WatchMetric } from "@/lib/types";
 const TREND_STYLES: Record<Trend, { label: string; className: string; icon: typeof Minus }> = {
   improving: { label: "Improving", className: "text-success", icon: ArrowDown },
   steady: { label: "Steady", className: "text-muted-foreground", icon: Minus },
-  worsening: { label: "Worsening", className: "text-destructive", icon: ArrowUp },
+  worsening: { label: "Worsening", className: "text-attention", icon: ArrowUp },
 };
 
 export default function WatchMetricsCard({
@@ -16,8 +16,8 @@ export default function WatchMetricsCard({
 }) {
   const { label, className, icon: Icon } = TREND_STYLES[trend];
   return (
-    <section className="rounded-2xl bg-white p-5 shadow-soft animate-enter-up">
-      <h2 className="font-heading text-lg text-foreground">Watch Metrics</h2>
+    <section className="rounded-2xl bg-surface p-5 shadow-soft animate-enter-up">
+      <h2 className="text-lg font-semibold text-foreground">Watch Metrics</h2>
       <div className="mt-3">
         <p className="text-sm font-semibold capitalize text-foreground">
           {metric.metric.replace(/_/g, " ")}

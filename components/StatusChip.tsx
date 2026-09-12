@@ -1,9 +1,9 @@
 import { RecoveryStatus } from "@/lib/types";
 
 const STYLES: Record<RecoveryStatus, { label: string; className: string }> = {
-  "on-track": { label: "On Track", className: "bg-success/10 text-success" },
-  "needs-attention": { label: "Needs Attention", className: "bg-warning/10 text-warning" },
-  urgent: { label: "Urgent Visit Booked", className: "bg-destructive/10 text-destructive" },
+  "on-track": { label: "On Track", className: "bg-success-soft text-success" },
+  "needs-attention": { label: "Needs Attention", className: "bg-attention-soft text-attention" },
+  urgent: { label: "Urgent Visit Booked", className: "bg-urgent-soft text-urgent" },
 };
 
 export default function StatusChip({ status }: { status: RecoveryStatus }) {

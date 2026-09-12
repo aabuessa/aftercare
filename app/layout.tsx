@@ -1,27 +1,30 @@
 import type { Metadata } from "next";
-import { Varela_Round, Nunito_Sans } from "next/font/google";
+import { Manrope, Inter } from "next/font/google";
+import { RecoveryProvider } from "@/components/providers/RecoveryProvider";
 import "./globals.css";
 
-const heading = Varela_Round({
+const marketing = Manrope({
   subsets: ["latin"],
-  weight: "400",
-  variable: "--font-heading",
+  weight: ["600", "700", "800"],
+  variable: "--font-manrope",
 });
 
-const body = Nunito_Sans({
+const body = Inter({
   subsets: ["latin"],
-  variable: "--font-body",
+  variable: "--font-inter",
 });
 
 export const metadata: Metadata = {
   title: "AfterCare",
-  description: "Your post-discharge recovery companion",
+  description: "The AI companion that walks patients home from the hospital",
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en" className={`${heading.variable} ${body.variable}`}>
-      <body>{children}</body>
+    <html lang="en" className={`${marketing.variable} ${body.variable}`}>
+      <body>
+        <RecoveryProvider>{children}</RecoveryProvider>
+      </body>
     </html>
   );
 }

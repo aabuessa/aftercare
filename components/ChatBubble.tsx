@@ -9,8 +9,8 @@ export default function ChatBubble({ message }: { message: ChatMessage }) {
       <div
         className={`max-w-[80%] rounded-2xl px-4 py-3 text-sm leading-relaxed shadow-soft ${
           isPatient
-            ? "bg-accent text-accent-foreground"
-            : "bg-white text-foreground"
+            ? "bg-primary text-primary-foreground"
+            : "bg-surface text-foreground"
         }`}
       >
         {message.text}

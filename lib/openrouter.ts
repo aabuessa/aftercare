@@ -1,7 +1,7 @@
 import OpenAI from "openai";
 import { CheckInLogEntry, CheckInResult, PatientRecord, Trend } from "./types";
 
-const MODEL = process.env.OPENROUTER_MODEL ?? "meta-llama/llama-3.1-8b-instruct:free";
+const MODEL = process.env.OPENROUTER_MODEL ?? "nvidia/nemotron-3-super-120b-a12b:free";
 
 const FALLBACK_RESULT: CheckInResult = {
   assessment: "Logged, monitoring",
@@ -38,19 +38,26 @@ Do not escalate based on severity, tone, or your own clinical intuition —
 only the 3-consecutive-day rule above decides escalate. Count the streak
 yourself from the check-in history plus today's message before answering.
 
-Respond with ONLY a single JSON object, no prose, no code fences, in exactly this shape:
+VAGUE INPUT: If today's message does not describe a concrete symptom (e.g.
+"im bad", "not great", "meh") — set escalate=false and trend="steady", and
+make "assessment" a brief, warm, natural clarifying question asking what
+specifically feels off (e.g. swelling, pain, mobility, sleep). Never guess a
+symptom that wasn't stated, and never fall back to a generic non-answer —
+always produce a real, specific clarifying question in this case.
+
+Respond with ONLY a single JSON object. No markdown formatting, no
+commentary before or after it, in exactly this shape:
 {"assessment": "<one short sentence for the patient>", "escalate": <true or false>, "reasoning": "<one short sentence stating the consecutive-day count and how it maps to the rule>", "trend": "<improving|steady|worsening>"}`;
 }
 
-function extractJson(raw: string): string {
+function stripCodeFences(raw: string): string {
   const fenced = raw.match(/```(?:json)?\s*([\s\S]*?)```/i);
-  if (fenced) return fenced[1].trim();
-  const start = raw.indexOf("{");
-  const end = raw.lastIndexOf("}");
-  if (start !== -1 && end !== -1 && end > start) {
-    return raw.slice(start, end + 1);
-  }
-  return raw.trim();
+  return fenced ? fenced[1].trim() : raw.trim();
+}
+
+function extractJsonBlock(text: string): string {
+  const match = text.match(/\{[\s\S]*\}/);
+  return match ? match[0] : text;
 }
 
 function isTrend(value: unknown): value is Trend {
@@ -102,10 +109,31 @@ export async function evaluateCheckIn(
     // Some free OpenRouter models attach `reasoning`/`reasoning_details` alongside
     // `content` — only `content` holds the JSON contract, so that's all we read.
     const raw = completion.choices[0]?.message?.content ?? "";
-    const parsed = JSON.parse(extractJson(raw));
+    console.log("[openrouter] raw check-in response:", raw);
+
+    const jsonCandidate = extractJsonBlock(stripCodeFences(raw));
+
+    let parsed: unknown;
+    try {
+      parsed = JSON.parse(jsonCandidate);
+    } catch (parseError) {
+      console.error(
+        "[openrouter] JSON.parse failed on extracted candidate:",
+        parseError,
+        "\ncandidate was:",
+        jsonCandidate
+      );
+      return FALLBACK_RESULT;
+    }
+
     const result = coerceResult(parsed);
-    return result ?? FALLBACK_RESULT;
-  } catch {
+    if (!result) {
+      console.error("[openrouter] parsed JSON missing expected fields:", parsed);
+      return FALLBACK_RESULT;
+    }
+    return result;
+  } catch (error) {
+    console.error("[openrouter] request to OpenRouter failed:", error);
     return FALLBACK_RESULT;
   }
 }

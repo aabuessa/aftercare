@@ -75,4 +75,43 @@ export interface DoseLogEntry {
 
 export type ThreadItem =
   | { kind: "bubble"; id: string; message: ChatMessage }
-  | { kind: "escalation"; id: string; result: CheckInResult; date: string };
+  | { kind: "escalation"; id: string; day: number; result: CheckInResult; date: string };
+
+export interface Appointment {
+  id: string;
+  status: "requested" | "confirmed" | "completed" | "cancelled";
+  clinician: string;
+  specialty: string;
+  dateTimeLabel: string;
+  mode: "virtual" | "in-person";
+  facility: string;
+  notes?: string;
+}
+
+export interface CareTeamMember {
+  id: string;
+  name: string;
+  role: string;
+  specialty: string;
+  facility: string;
+  nextAppointment?: string;
+}
+
+export interface LabResult {
+  testName: string;
+  value: string;
+  unit: string;
+  referenceRange: string;
+  collectionDate: string;
+  orderingClinician: string;
+  explanation: string;
+}
+
+export interface ThreadMessage {
+  id: string;
+  sender: "patient" | "coordinator";
+  senderName: string;
+  text: string;
+  timeLabel: string;
+  read: boolean;
+}

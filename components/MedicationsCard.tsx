@@ -13,8 +13,8 @@ export default function MedicationsCard({
   onToggleDose: (index: number) => void;
 }) {
   return (
-    <section className="rounded-2xl bg-white p-5 shadow-soft animate-enter-up">
-      <h2 className="font-heading text-lg text-foreground">Medications</h2>
+    <section className="rounded-2xl bg-surface p-5 shadow-soft animate-enter-up">
+      <h2 className="text-lg font-semibold text-foreground">Medications</h2>
       <div className="mt-3">
         <p className="text-sm font-semibold text-foreground">
           {medication.name} — {medication.dose}

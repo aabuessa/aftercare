@@ -26,8 +26,11 @@ export default function ChatPanel({
   }
 
   return (
-    <section className="flex h-full flex-col rounded-2xl bg-white/60 p-4 shadow-soft sm:p-6">
-      <h2 className="font-heading text-lg text-foreground">Check-In</h2>
+    <section className="flex h-full flex-col rounded-2xl bg-mint/50 p-4 shadow-soft sm:p-6">
+      <div>
+        <h2 className="text-lg font-semibold text-foreground">Check-In</h2>
+        <p className="text-xs font-medium text-muted-foreground">AfterCare Companion &middot; AI care assistant</p>
+      </div>
       <div className="mt-4 flex-1 space-y-3 overflow-y-auto pr-1">
         {items.map((item, index) => (
           <div key={item.id} style={{ animationDelay: `${Math.min(index, 6) * 40}ms` }}>
@@ -40,7 +43,7 @@ export default function ChatPanel({
         ))}
         {isLoading && (
           <div className="flex justify-start">
-            <div className="animate-enter-up rounded-2xl bg-white px-4 py-3 text-sm text-muted-foreground shadow-soft">
+            <div className="animate-enter-up rounded-2xl bg-surface px-4 py-3 text-sm text-muted-foreground shadow-soft">
               Reviewing your update…
             </div>
           </div>
@@ -52,12 +55,12 @@ export default function ChatPanel({
           onChange={(event) => setDraft(event.target.value)}
           placeholder="How are you feeling today?"
           disabled={isLoading}
-          className="flex-1 rounded-xl border border-border bg-white px-4 py-2 text-sm outline-none transition-shadow focus:shadow-soft disabled:opacity-60"
+          className="flex-1 rounded-lg border border-border bg-surface px-4 py-2 text-sm outline-none transition-shadow focus:shadow-soft disabled:opacity-60"
         />
         <button
           type="submit"
           disabled={isLoading}
-          className="flex items-center justify-center rounded-xl bg-accent px-4 py-2 text-accent-foreground transition-transform active:scale-[0.97] disabled:opacity-60"
+          className="flex items-center justify-center rounded-lg bg-primary px-4 py-2 text-primary-foreground transition-transform active:scale-[0.97] disabled:opacity-60"
         >
           <PaperPlaneRight size={18} weight="fill" />
         </button>
