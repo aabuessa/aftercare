@@ -10,4 +10,10 @@ build/
 CLAUDE.md
 OPERATOR-HANDOFF.md
 AGENTS.md
-.claude/logs/
+.claude/
+
+# next.js
+.next/
+out/
+next-env.d.ts
+*.tsbuildinfo
